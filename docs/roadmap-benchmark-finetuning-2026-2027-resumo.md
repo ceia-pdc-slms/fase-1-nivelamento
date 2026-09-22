@@ -54,7 +54,7 @@ Este documento define somente o planejamento de alto nível. O detalhamento das 
 
 ### Fase 1 — Nivelamento
 
-**Período:** setembro a meados de novembro de 2026 (aproximadamente 10 semanas)
+**Período:** 10 de setembro a 6 de novembro de 2026 (aproximadamente 8 semanas)
 
 **Objetivo:** criar uma base técnica e conceitual comum, identificar diferenças de experiência e preparar todos para participar dos ciclos experimentais seguintes.
 
@@ -63,13 +63,15 @@ Este documento define somente o planejamento de alto nível. O detalhamento das 
 - entendimento compartilhado dos conceitos, ferramentas e práticas essenciais;
 - ambiente e convenções mínimas comuns para o trabalho experimental;
 - diagnóstico das competências e necessidades de acompanhamento da equipe;
-- capacidade inicial de executar e explicar um fluxo experimental orientado.
+- capacidade inicial de executar e explicar um fluxo experimental orientado;
+- um paper principal e uma alternativa selecionados em cada frente: fine-tuning e benchmarking;
+- primeiros artefatos e evidências de execução que possam continuar na reprodução.
 
-**Critério de conclusão:** todos conseguem explicar os fundamentos essenciais, executar uma parte verificável do fluxo experimental e estão preparados para participar da reprodução dos papers com apoio compatível com seu nível de experiência. A passagem de fase depende dessa prontidão, e não apenas do término do calendário previsto.
+**Critério de conclusão:** as oito apresentações e seus artefatos estão acessíveis, todos conseguem explicar os fundamentos essenciais, os papers foram selecionados com recorte e custo estimados e cada equipe produziu uma primeira evidência de execução. A passagem de fase depende dessa prontidão, e não apenas do calendário.
 
 ### Fase 2 — Reprodução de papers
 
-**Período:** meados de novembro de 2026 a fevereiro de 2027 (aproximadamente 15 semanas)
+**Período principal:** novembro de 2026 a fevereiro de 2027 (aproximadamente 16 semanas), com prospecção e estudo inicial durante a Fase 1.
 
 **Objetivo:** desenvolver autonomia experimental e produzir a principal base de evidências do projeto por meio da reprodução crítica de trabalhos científicos relevantes para benchmark, comportamento agêntico e treinamento de modelos.
 
@@ -81,12 +83,13 @@ Este documento define somente o planejamento de alto nível. O detalhamento das 
 - identificação de técnicas, artefatos e perguntas que possam alimentar a plataforma própria;
 - avaliação do potencial de uma reprodução, extensão ou análise derivada tornar-se a contribuição do artigo do projeto.
 - tempo suficiente para preparação, execução, correção de falhas, reexecução e análise dos experimentos, sem reduzir a reprodução a uma demonstração superficial.
+- componentes reutilizáveis que possam ser incorporados progressivamente à plataforma experimental.
 
 **Critério de conclusão:** a equipe consegue reproduzir uma afirmação relevante dos papers ou explicar, com evidências, por que ela não foi reproduzida, e consegue decidir quais resultados devem ser aproveitados na continuidade do projeto.
 
 ### Fase 3 — Criação e exploração da plataforma experimental
 
-**Período:** março a junho de 2027 (aproximadamente 17 semanas)
+**Período principal:** março a junho de 2027 (aproximadamente 17 semanas), com fundações técnicas iniciadas durante as reproduções.
 
 **Objetivo:** transformar os aprendizados e artefatos das reproduções em uma infraestrutura experimental comum, reproduzível e adequada às necessidades do projeto, usando-a para aprofundar as evidências mais promissoras.
 
@@ -123,7 +126,7 @@ Este documento define somente o planejamento de alto nível. O detalhamento das 
 
 #### Caráter opcional da investigação complementar
 
-A investigação correspondente à antiga fase de pesquisa não é uma etapa obrigatória e independente. Se for necessária, ela será incorporada à Fase 3, durante a exploração da plataforma, e deverá estar concluída antes do início da consolidação final.
+Uma investigação complementar não constitui uma fase independente. Se for necessária, ela será incorporada à Fase 3, durante a exploração da plataforma, e deverá estar concluída antes do início da consolidação final.
 
 O artigo científico poderá ser estruturado a partir de uma ou da combinação das seguintes origens:
 
@@ -133,18 +136,26 @@ O artigo científico poderá ser estruturado a partir de uma ou da combinação 
 
 Essa decisão será orientada pela força das evidências disponíveis, pela relevância da contribuição e pela viabilidade dentro do prazo do projeto.
 
-## 5. Distribuição temporal de alto nível
+## 5. Sobreposição planejada entre as fases
+
+As fases definem o foco predominante de cada período, mas o trabalho é contínuo:
+
+- **Fases 1 e 2:** a busca, a leitura e os primeiros testes dos papers acontecem durante o nivelamento. Slides, visualizações, exemplos e configurações podem se tornar os primeiros artefatos da reprodução;
+- **Fases 2 e 3:** código de avaliação, pipelines, configurações, datasets preparados e formatos de resultado produzidos nas reproduções passam gradualmente a compor a plataforma experimental;
+- **Fase 4:** consolida o que foi produzido nas três fases anteriores, sem abrir uma nova frente ampla de pesquisa.
+
+## 6. Distribuição temporal de alto nível
 
 | Período | Fase | Direção principal |
 |---|---|---|
-| **Setembro a meados de novembro de 2026** | Fase 1 | Nivelar a equipe e estabelecer a base comum |
-| **Meados de novembro de 2026 a fevereiro de 2027** | Fase 2 | Reproduzir papers com profundidade e produzir a base de evidências do projeto |
+| **10 de setembro a 6 de novembro de 2026** | Fase 1 | Nivelar a equipe, prospectar papers e produzir artefatos iniciais |
+| **Novembro de 2026 a fevereiro de 2027** | Fase 2 | Reproduzir papers com profundidade e produzir a base de evidências do projeto |
 | **Março a junho de 2027** | Fase 3 | Construir, integrar e explorar a plataforma experimental própria |
 | **Julho a agosto de 2027** | Fase 4 | Reexecutar, validar e transformar os resultados em entregas finais |
 
 A distribuição de tarefas dentro de cada período será definida no planejamento operacional seguinte.
 
-## 6. Papel dos papers e da plataforma
+## 7. Papel dos papers e da plataforma
 
 Os papers cumprem duas funções: desenvolver a capacidade experimental da equipe e abrir um possível caminho direto para a contribuição científica. Portanto, a reprodução não deve ser tratada apenas como exercício preparatório; seus resultados podem ser aprofundados e incorporados ao artigo.
 
@@ -152,7 +163,7 @@ Da mesma forma, a plataforma experimental não é apenas infraestrutura de apoio
 
 Durante as Fases 2 e 3, o grupo deverá avaliar continuamente qual direção apresenta a evidência mais promissora para o artigo. Essa direção deve estar definida e experimentalmente sustentada até o fim de junho. A Fase 4 apenas consolida, valida e comunica a contribuição escolhida; ela não deve receber uma nova frente ampla de pesquisa.
 
-## 7. Princípio de adaptação
+## 8. Princípio de adaptação
 
 O roadmap deve preservar:
 

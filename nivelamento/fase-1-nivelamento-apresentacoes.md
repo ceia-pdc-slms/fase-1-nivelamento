@@ -1,9 +1,9 @@
 # Fase 1 — Nivelamento, apresentações e prospecção de papers
 
-**Período:** 10 de setembro a 20 de novembro de 2026  
-**Duração:** encontro de lançamento + 10 semanas de nivelamento  
-**Equipe:** Ana, Gabriel, Henrique, Elisa, Jolie e Mateus  
-**Objetivo:** construir uma base comum sobre LLMs e preparar duas equipes para selecionar, até o início da Fase 2, pelo menos um paper de fine-tuning e um paper de benchmarking para reprodução.
+**Período:** 10 de setembro a 6 de novembro de 2026
+**Duração:** encontro de lançamento + 8 semanas de nivelamento
+**Equipe:** Ana, Gabriel, Henrique, Elisa, Jolie e Mateus
+**Objetivo:** construir uma base comum sobre LLMs enquanto as duas equipes procuram, estudam e iniciam a preparação dos papers de fine-tuning e benchmarking que serão reproduzidos na Fase 2.
 
 ## 1. Organização das equipes
 
@@ -32,7 +32,7 @@
 
 **Missão na Fase 1:** explicar como capacidades de modelos são transformadas em tarefas, métricas e evidências, avançando até avaliação de tool-calling e comportamento agêntico.
 
-Essa divisão respeita as preferências declaradas, mas não cria dois grupos isolados. Todos estudam os dez assuntos; a equipe designada é responsável por ensinar o tema aos demais.
+Essa divisão respeita as preferências declaradas, mas não cria dois grupos isolados. Todos estudam os oito assuntos; a equipe designada é responsável por ensinar o tema aos demais.
 
 ## 2. Dinâmica geral
 
@@ -49,8 +49,8 @@ As equipes apresentam em semanas alternadas. Assim, cada trio possui aproximadam
 | 6 | 19–23/10 | Benchmarks | Desenho experimental e reprodutibilidade |
 | 7 | 26–30/10 | Fine-tuning | PEFT, LoRA e QLoRA |
 | 8 | 02–06/11 | Benchmarks | Tool-calling e benchmarks agênticos |
-| 9 | 09–13/11 | Fine-tuning | Como escolher e reproduzir um paper de fine-tuning |
-| 10 | 16–20/11 | Benchmarks | Como escolher e reproduzir um paper de benchmark |
+
+O nivelamento e a reprodução não são blocos isolados. Ao longo das oito semanas, os papers encontrados alimentam as apresentações e os artefatos produzidos devem, sempre que possível, servir como primeiro passo da reprodução. A execução completa continua na Fase 2.
 
 ## 3. Conteúdo de cada semana
 
@@ -180,53 +180,19 @@ As equipes apresentam em semanas alternadas. Assim, cada trio possui aproximadam
 - métricas por categoria e taxonomia de erros;
 - visão geral de BFCL e benchmarks relacionados.
 
-### Semana 9 — Seleção de um paper reproduzível de fine-tuning
-
-**Equipe responsável:** Treinamento e fine-tuning.
-
-**Pergunta orientadora:** qual paper de treinamento ou adaptação produz a melhor combinação entre aprendizado, relevância científica e viabilidade?
-
-**Conteúdo mínimo:**
-
-- síntese do estado da arte encontrado pelo trio;
-- apresentação comparável de pelo menos três papers candidatos;
-- hipótese ou afirmação central reproduzível de cada paper;
-- código, dados, licença e dependências disponíveis;
-- modelo, hardware, tempo e armazenamento exigidos;
-- recorte mínimo que preserva a ideia do experimento;
-- métricas, baseline, riscos e possíveis extensões para PT-BR;
-- recomendação principal e alternativa de contingência.
-
-### Semana 10 — Seleção de um paper reproduzível de benchmark
-
-**Equipe responsável:** Benchmarks e comportamento agêntico.
-
-**Pergunta orientadora:** qual paper de benchmark permite reproduzir uma afirmação relevante e gerar um artefato reutilizável pelo projeto?
-
-**Conteúdo mínimo:**
-
-- síntese do estado da arte encontrado pelo trio;
-- apresentação comparável de pelo menos três papers candidatos;
-- capacidade avaliada e afirmação central de cada paper;
-- código, dataset, licença e avaliador disponíveis;
-- modelos necessários e custo de inferência;
-- recorte mínimo com categorias e quantidade de exemplos;
-- métricas, baselines, riscos e possibilidade de adaptação para PT-BR;
-- valor do harness produzido para a futura plataforma;
-- recomendação principal e alternativa de contingência.
-
 ## 4. Busca contínua de papers
 
-A procura por papers acontece durante toda a fase, mas sem uma entrega extensa a cada semana. Cada equipe mantém uma lista simples de candidatos e registra apenas as mudanças relevantes.
+A procura por papers acontece durante toda a fase e faz parte do trabalho técnico, mas não ocupa uma semana exclusiva de apresentação. Cada equipe mantém uma lista simples de candidatos, relaciona os trabalhos aos temas estudados e registra apenas avanços relevantes.
+
+Um paper usado para aprofundar um tema ou orientar um artefato pode ser escolhido para reprodução completa. Nesse caso, o estudo e o material produzidos no nivelamento passam diretamente para a Fase 2.
 
 | Marco | Resultado esperado por equipe |
 |---|---|
 | Fim da semana 2 | termos de busca e primeiros papers encontrados |
 | Fim da semana 4 | lista inicial de papers relacionados |
-| Fim da semana 6 | triagem de relevância e viabilidade |
-| Fim da semana 8 | shortlist de até três papers |
-| Semana 9 ou 10 | defesa do paper principal e de uma alternativa de contingência |
-| Gate final | decisão conjunta sobre os dois papers que entram na Fase 2 |
+| Fim da semana 6 | triagem de relevância, viabilidade, código, dados e recursos |
+| Fim da semana 8 | paper principal e alternativa por frente, com recorte e estudo inicial |
+| Gate final | decisão conjunta sobre os dois papers e continuidade imediata na Fase 2 |
 
 ### Ficha mínima de cada paper candidato
 
@@ -263,7 +229,7 @@ A equipe continua responsável por:
 
 ## 6. Progressão dos materiais
 
-Nas primeiras semanas, as equipes devem priorizar explicações claras e exemplos simples. Conforme os tópicos se aproximam de fine-tuning e benchmarking, os papers e os artefatos podem ganhar maior profundidade. Nas semanas finais, o slideshow deve comparar os papers candidatos e justificar a recomendação da equipe.
+Nas primeiras semanas, as equipes devem priorizar explicações claras e exemplos simples. Conforme os tópicos se aproximam de fine-tuning e benchmarking, os papers e os artefatos ganham profundidade e podem evoluir diretamente para componentes da reprodução ou da plataforma experimental.
 
 ## 7. Estrutura recomendada da apresentação
 
@@ -318,12 +284,13 @@ A apresentação é considerada concluída quando:
 
 O nivelamento termina quando:
 
-1. as dez apresentações tiverem sido realizadas e seus materiais estiverem acessíveis;
+1. as oito apresentações tiverem sido realizadas e seus materiais estiverem acessíveis;
 2. todos conseguirem reconstruir o fluxo entre tokenização, geração, treinamento, adaptação e avaliação;
 3. as duas equipes tiverem inspecionado código, dados e requisitos dos papers finalistas;
 4. estiverem definidos um paper principal e um reserva para fine-tuning;
 5. estiverem definidos um paper principal e um reserva para benchmarking;
 6. houver um recorte inicial, uma hipótese reproduzível e uma estimativa de custo para cada reprodução;
-7. dúvidas que impeçam o início da Fase 2 estiverem resolvidas ou explicitamente tratadas como riscos.
+7. cada equipe tiver produzido uma primeira evidência de execução, como validação do ambiente, inspeção do código, carregamento dos dados ou teste mínimo do fluxo;
+8. dúvidas que impeçam a continuidade na Fase 2 estiverem resolvidas ou explicitamente tratadas como riscos.
 
-O fim das dez semanas é uma previsão. A entrada na Fase 2 depende do atendimento do gate, não apenas da data no calendário.
+O fim das oito semanas é uma previsão. A transição para a Fase 2 depende do atendimento do gate, mas a prospecção e os primeiros passos da reprodução já acontecem durante o nivelamento.
