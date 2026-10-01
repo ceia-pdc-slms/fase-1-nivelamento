@@ -1,0 +1,4 @@
+# Dependências do notebook. Para a interface local, instale também jupyterlab.
+# Verificado com NumPy 2.5.3 e Matplotlib 3.11.2; outras versões podem variar numericamente.
+numpy>=1.26,<3
+matplotlib>=3.8,<4
