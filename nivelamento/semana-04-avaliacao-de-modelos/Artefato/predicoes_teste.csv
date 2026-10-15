@@ -1,0 +1,34 @@
+﻿texto,tipo,esperado,palavras_chave,modelo_A,resposta_bruta_A,modelo_B,resposta_bruta_B
+"A comida era excelente, mas o atendimento foi lento demais.",misto,Negativo,Neutro,Negativo,Negativo,Negativo,Negativo
+"O código não está bom, precisa ser refeito.",negacao,Negativo,Positivo,Negativo,Negativo,Negativo,Negativo
+"Que maravilha, o servidor caiu bem na hora que eu ia rodar os testes da disciplina de SO.",sarcasmo,Negativo,Neutro,Negativo,Negativo,Negativo,Negativo
+O diagrama de sequência feito no PlantUML ficou super claro e bem estruturado.,simples,Positivo,Neutro,Positivo,Positivo,Positivo,Positivo
+"aff, caiu a internet de novo 🙄",informal,Negativo,Negativo,Negativo,Negativo,Negativo,Negativo
+Nada como um merge conflict às 23h para animar a noite.,sarcasmo,Negativo,Neutro,Negativo,Negativo,Negativo,Negativo
+Esse tutorial de manipulação de matrizes em Go salvou meu final de semana.,simples,Positivo,Positivo,Positivo,Positivo,Positivo,Positivo
+Não tenho do que reclamar do atendimento.,negacao,Positivo,Neutro,Positivo,Positivo,Positivo,Positivo
+"O novo laboratório do CEIA ficou incrível, a infraestrutura está excelente.",simples,Positivo,Positivo,Positivo,Positivo,Positivo,Positivo
+"Fiquei horas debugando um erro de tipagem no TypeScript, que ódio.",simples,Negativo,Negativo,Negativo,Negativo,Negativo,Negativo
+"Tentei cozinhar chuchu e ficou completamente sem gosto, detestei.",simples,Negativo,Negativo,Negativo,Negativo,Negativo,Negativo
+O manual explica o que fazer quando a conexão está lenta.,enganosa,Neutro,Neutro,Neutro,Neutro,Neutro,Neutro
+O professor mudou a data da prova de novo.,ambiguo,Negativo,Neutro,Negativo,Negativo,Neutro,Neutro
+O script em Python exportou os dados para a planilha.,simples,Neutro,Neutro,Neutro,Neutro,Neutro,Neutro
+O professor passou uma lista de exercícios sobre árvores 2-3-4.,simples,Neutro,Neutro,Neutro,Neutro,Neutro,Neutro
+Vou escutar Capital Inicial enquanto termino a modelagem do banco de dados.,simples,Neutro,Neutro,Neutro,Neutro,Neutro,Neutro
+"O modelo base não acertou quase nada do dataset, desempenho decepcionante.",simples,Negativo,Negativo,Negativo,Negativo,Negativo,Negativo
+A reunião de planejamento do projeto de evolução de software foi super produtiva.,simples,Positivo,Positivo,Positivo,Positivo,Positivo,Positivo
+"Que alívio, finalmente meu código em C++ passou em todos os testes de memória.",simples,Positivo,Positivo,Positivo,Positivo,Positivo,Positivo
+O teste de estresse derrubou o servidor conforme o planejado.,dominio,Neutro,Neutro,Neutro,Neutro,Neutro,Neutro
+A temperatura em Goiânia deve chegar aos 34 graus hoje à tarde.,simples,Neutro,Neutro,Neutro,Neutro,Neutro,Neutro
+Consegui rodar o pipeline com os agentes no Google ADK de primeira!,simples,Positivo,Neutro,Positivo,Positivo,Positivo,Positivo
+Precisei matar o processo que estava travado no servidor de testes.,dominio,Neutro,Negativo,Neutro,Neutro,Neutro,Neutro
+"Enfim, sexta-feira.",ambiguo,Positivo,Neutro,Positivo,Positivo,Positivo,Positivo
+A aula sobre escalonamento de processos vai ser na sala 204 amanhã.,simples,Neutro,Neutro,Neutro,Neutro,Neutro,Neutro
+"A integração do WAHA com o n8n facilitou demais minha vida, ferramenta maravilhosa.",simples,Positivo,Positivo,Positivo,Positivo,Positivo,Positivo
+"Parabéns pra mim, apaguei a branch errada.",sarcasmo,Negativo,Positivo,Negativo,Negativo,Negativo,Negativo
+"Bom, vamos ver no que dá.",ambiguo,Neutro,Positivo,Neutro,Neutro,Neutro,Neutro
+O boletim de ocorrência foi registrado no sistema online.,simples,Neutro,Neutro,Neutro,Neutro,Neutro,Neutro
+O relatório classifica o desempenho como bom ou ruim de acordo com a nota.,enganosa,Neutro,Neutro,Neutro,Neutro,Neutro,Neutro
+"Esse LLM está alucinando demais, o resultado da avaliação foi péssimo.",simples,Negativo,Negativo,Negativo,Negativo,Negativo,Negativo
+"show de bola, valeu pela ajuda!",informal,Positivo,Positivo,Positivo,Positivo,Positivo,Positivo
+"Ótimo, mais uma atualização do Windows no meio da prova.",sarcasmo,Negativo,Positivo,Negativo,Negativo,Negativo,Negativo
