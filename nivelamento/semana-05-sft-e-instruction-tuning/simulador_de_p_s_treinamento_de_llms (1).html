@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Pós-Treinamento de LLMs - CEIA</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            ceia: {
+              navy: '#0b1f3a',
+              darkNavy: '#071326',
+              blue: '#2563eb',
+              lightBlue: '#eff6ff',
+              cardBg: '#ffffff',
+              border: '#e2e8f0',
+              accent: '#1d4ed8'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    .ceia-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+    }
+    .ceia-header {
+      background: #0b1f3a;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .badge-ceia {
+      background-color: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar selection:bg-blue-600 selection:text-white">
+
+  <header class="ceia-header text-white sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-4">
+      
+      <!-- Brand & Header Title -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 border border-blue-400/30">
+          <i class="fa-solid fa-brain text-lg text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-extrabold tracking-widest text-blue-200 uppercase bg-blue-900/80 px-2 py-0.5 rounded border border-blue-700/60">CEIA</span>
+            <h1 class="text-base font-bold text-white tracking-tight">
+              Simulador de Pós-Treinamento de LLMs
+            </h1>
+          </div>
+          <p class="text-xs text-slate-300">Pipeline de Fine-Tuning: SFT &rarr; RLHF &rarr; RLVR &amp; Catastrophic Forgetting</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex bg-slate-900/80 p-1 rounded-xl border border-slate-700/80">
+        <button id="tab-btn-1" onclick="switchTab(1)" 
+          class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200 bg-blue-600 text-white shadow-md">
+          <i class="fa-solid fa-chart-line text-xs"></i>
+          <span>1. Catastrophic Forgetting</span>
+        </button>
+        <button id="tab-btn-2" onclick="switchTab(2)" 
+          class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800/60">
+          <i class="fa-solid fa-sitemap text-xs"></i>
+          <span>2. Mapa de Pós-Treinamento</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow">
+
+    <!-- TAB 1: CATASTROPHIC FORGETTING -->
+    <section id="tab-content-1" class="space-y-6">
+      
+      <!-- Slide Banner Info -->
+      <div class="ceia-card p-5 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-l-4 border-l-blue-600">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full badge-ceia text-xs font-semibold">
+            <i class="fa-solid fa-flask-vial"></i>
+            <span>Fundamentos de Avaliação &amp; Fine-Tuning</span>
+          </div>
+          <h2 class="text-lg font-bold text-slate-900">Retenção de Conhecimento Geral vs. Especialização no SFT</h2>
+          <p class="text-xs text-slate-600 max-w-2xl leading-relaxed">
+            Ao ajustar um modelo pré-treinado com pares de instrução (SFT), o ganho em capacidade conversacional pode sobrescrever os pesos que armazenam fatos genéricos (MMLU) e raciocínio formal.
+          </p>
+        </div>
+        <button onclick="resetSim()" class="w-full md:w-auto px-4 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition border border-slate-300 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-rotate-left"></i> Redefinir Parâmetros
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Controls Panel -->
+        <div class="lg:col-span-4 space-y-5">
+          <div class="ceia-card p-5 rounded-2xl space-y-5">
+            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 border-b border-slate-100 pb-2">
+              <i class="fa-solid fa-sliders text-blue-600"></i> Parâmetros do Treinamento
+            </h3>
+
+            <!-- Slider 1: SFT Epochs -->
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <label for="slider-sft" class="font-semibold text-slate-700">Épocas de Ajuste Fino (SFT)</label>
+                <span id="val-sft" class="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">5 Épocas</span>
+              </div>
+              <input type="range" id="slider-sft" min="1" max="10" value="5" step="1" 
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                oninput="updateSimulation()">
+              <p class="text-[11px] text-slate-500">Muitas épocas geram overfitting na sintaxe de instrução e degradação de fatos.</p>
+            </div>
+
+            <!-- Slider 2: Data Mixing -->
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <label for="slider-mixing" class="font-semibold text-slate-700">Data Mixing (Pré-treino)</label>
+                <span id="val-mixing" class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">10%</span>
+              </div>
+              <input type="range" id="slider-mixing" min="0" max="50" value="10" step="5" 
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                oninput="updateSimulation()">
+              <p class="text-[11px] text-slate-500">Misturar dados brutos do pré-treino previne o esquecimento de conhecimento geral.</p>
+            </div>
+
+            <!-- Learning Rate Selector -->
+            <div class="space-y-2">
+              <label class="font-semibold text-xs text-slate-700 block">Taxa de Aprendizado (Learning Rate)</label>
+              <div class="grid grid-cols-3 gap-2">
+                <button type="button" id="lr-low" onclick="setLR('low')" class="lr-btn text-xs py-2 px-2.5 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 font-medium transition">Baixa</button>
+                <button type="button" id="lr-mid" onclick="setLR('mid')" class="lr-btn text-xs py-2 px-2.5 rounded-lg border border-blue-500 bg-blue-50 text-blue-700 font-semibold transition">Média</button>
+                <button type="button" id="lr-high" onclick="setLR('high')" class="lr-btn text-xs py-2 px-2.5 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 font-medium transition">Alta</button>
+              </div>
+              <p class="text-[11px] text-slate-500">LR alta ajusta rápido a formatação mas destrói pesos cruciais da rede.</p>
+            </div>
+
+            <hr class="border-slate-200">
+
+            <!-- Summary Statistics Cards -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <span class="text-[10px] text-slate-500 uppercase font-bold block">AlpacaEval (Instruções)</span>
+                <span id="metric-instruct" class="text-xl font-extrabold text-blue-600">84.2%</span>
+                <span class="text-[10px] text-emerald-600 font-semibold block mt-0.5"><i class="fa-solid fa-arrow-up"></i> +69.2% vs Base</span>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <span class="text-[10px] text-slate-500 uppercase font-bold block">MMLU (Conhecimento)</span>
+                <span id="metric-mmlu" class="text-xl font-extrabold text-amber-600">68.5%</span>
+                <span id="metric-mmlu-diff" class="text-[10px] text-amber-600 font-semibold block mt-0.5"><i class="fa-solid fa-arrow-down"></i> -6.5% de perda</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Alert / Status Banner -->
+          <div id="status-card" class="p-4 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 text-xs space-y-1.5">
+            <div class="font-bold flex items-center gap-2 text-amber-800">
+              <i id="status-icon" class="fa-solid fa-circle-exclamation text-amber-600 text-sm"></i>
+              <span id="status-title">Risco Moderado de Esquecimento</span>
+            </div>
+            <p id="status-desc" class="text-amber-800/90 leading-relaxed">
+              O modelo está aprendendo a seguir instruções com clareza, mas apresenta leve perda de acurácia em exames conceituais de múltipla escolha.
+            </p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-8 flex flex-col gap-5">
+          <div class="ceia-card p-5 rounded-2xl flex-grow flex flex-col justify-between">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+              <div>
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-chart-line text-blue-600"></i> Desempenho nos Benchmarks por Época de SFT
+                </h3>
+                <p class="text-xs text-slate-500">Comparativo antes (Base) e durante o treinamento de instruções</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-3 text-xs font-semibold">
+                <div class="flex items-center gap-1.5 text-blue-700">
+                  <span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span> Instruções (AlpacaEval)
+                </div>
+                <div class="flex items-center gap-1.5 text-rose-700">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block"></span> MMLU (Geral)
+                </div>
+                <div class="flex items-center gap-1.5 text-purple-700">
+                  <span class="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block"></span> GSM8K (Matemática)
+                </div>
+              </div>
+            </div>
+
+            <!-- Canvas for Chart.js -->
+            <div class="relative w-full h-[310px] sm:h-[350px]">
+              <canvas id="chartCatastrophic"></canvas>
+            </div>
+          </div>
+
+          <!-- Slide Educational Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="ceia-card p-4 rounded-xl text-xs space-y-2 border-l-4 border-l-blue-600">
+              <h4 class="font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-circle-question text-blue-600"></i>
+                Por que ocorre o esquecimento?
+              </h4>
+              <p class="text-slate-600 leading-relaxed">
+                No pré-treino, a função objetivo otimiza a perda de Cross-Entropy no próximo token em textos gerais. No SFT, o gradiente foca apenas na sintaxe do assistente. Sem regularização, os pesos que armazenam conhecimentos específicos são sobrescritos.
+              </p>
+            </div>
+            <div class="ceia-card p-4 rounded-xl text-xs space-y-2 border-l-4 border-l-emerald-600">
+              <h4 class="font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-emerald-600"></i>
+                Estratégias de Mitigação
+              </h4>
+              <p class="text-slate-600 leading-relaxed">
+                Recomenda-se adicionar <strong>Data Mixing</strong> (5% a 20% do dataset de pré-treino misturado no pacote de SFT), controlar a taxa de aprendizado e rodar testes automatizados de controle (Harness) a cada checkpoint.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- TAB 2: MAPA DE PÓS-TREINAMENTO -->
+    <section id="tab-content-2" class="space-y-6 hidden">
+      
+      <!-- Interactive Pipeline Banner -->
+      <div class="ceia-card p-5 rounded-2xl space-y-4 border-l-4 border-l-indigo-600">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-sitemap text-indigo-600"></i> O Mapa Completo do Pós-Treinamento
+            </h2>
+            <p class="text-xs text-slate-600">
+              Acompanhe como o comportamento e a inteligência da LLM se transformam a cada estágio da pipeline.
+            </p>
+          </div>
+          <span class="text-xs px-3 py-1 rounded-full badge-ceia font-mono font-semibold">
+            Pipeline: Pretraining &rarr; SFT &rarr; RLHF &rarr; RLVR
+          </span>
+        </div>
+
+        <!-- Pipeline Step Navigation Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+          
+          <!-- Stage 1 -->
+          <button onclick="selectStage(1)" id="stage-btn-1" class="stage-btn text-left p-3.5 rounded-xl border transition-all duration-200 bg-blue-50 border-blue-600 shadow-sm ring-1 ring-blue-600">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] font-bold tracking-wider uppercase text-slate-500">Estágio 1</span>
+              <span class="p-1 rounded-md bg-blue-100 text-blue-700 text-xs"><i class="fa-solid fa-database"></i></span>
+            </div>
+            <div class="font-bold text-sm text-slate-900">Modelo Base</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Pré-treinamento Bruto</div>
+          </button>
+
+          <!-- Stage 2 -->
+          <button onclick="selectStage(2)" id="stage-btn-2" class="stage-btn text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all duration-200">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] font-bold tracking-wider uppercase text-slate-500">Estágio 2</span>
+              <span class="p-1 rounded-md bg-slate-100 text-blue-600 text-xs"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+            </div>
+            <div class="font-bold text-sm text-slate-900">SFT</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Instruções Supervisionadas</div>
+          </button>
+
+          <!-- Stage 3 -->
+          <button onclick="selectStage(3)" id="stage-btn-3" class="stage-btn text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all duration-200">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] font-bold tracking-wider uppercase text-slate-500">Estágio 3</span>
+              <span class="p-1 rounded-md bg-slate-100 text-emerald-600 text-xs"><i class="fa-solid fa-shield-cat"></i></span>
+            </div>
+            <div class="font-bold text-sm text-slate-900">RLHF / Alignment</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Preferências &amp; Segurança</div>
+          </button>
+
+          <!-- Stage 4 -->
+          <button onclick="selectStage(4)" id="stage-btn-4" class="stage-btn text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all duration-200">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10px] font-bold tracking-wider uppercase text-slate-500">Estágio 4</span>
+              <span class="p-1 rounded-md bg-slate-100 text-purple-600 text-xs"><i class="fa-solid fa-microchip"></i></span>
+            </div>
+            <div class="font-bold text-sm text-slate-900">RLVR / Reasoning</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Reforço Verificável (Exato)</div>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Main Stage Detail View -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: Technical Specifications -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="ceia-card p-5 rounded-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <span id="stage-badge" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200">
+                Estágio 1 de 4
+              </span>
+              <span id="stage-tech-tag" class="text-xs text-blue-700 font-mono font-semibold">Self-Supervised Loss</span>
+            </div>
+
+            <h3 id="stage-title" class="text-lg font-bold text-slate-900">Modelo Base Pré-treinado</h3>
+            <p id="stage-description" class="text-xs text-slate-600 leading-relaxed">
+              O modelo aprendeu a prever o próximo token em terabytes de texto. Tem vasto conhecimento, mas não sabe interagir como assistente.
+            </p>
+
+            <hr class="border-slate-100">
+
+            <div class="space-y-3">
+              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-gear text-blue-600"></i> Ficha Técnica
+              </h4>
+              
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1">
+                <span class="font-semibold text-slate-800 block">Objetivo do Treinamento:</span>
+                <span id="stage-objective" class="text-slate-600">Minimizar a Perda de Cross-Entropy em toda a sequência de tokens.</span>
+              </div>
+
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1">
+                <span class="font-semibold text-slate-800 block">Loss Masking (Mascaramento):</span>
+                <span id="stage-masking" class="text-slate-600">Nenhum mascaramento. A perda é calculada em 100% dos tokens de entrada.</span>
+              </div>
+
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1">
+                <span class="font-semibold text-slate-800 block">Formato dos Dados / Template:</span>
+                <span id="stage-format" class="text-slate-600">Texto contínuo sem estrutura especial de Chat Template.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Multi-Example Simulator -->
+        <div class="lg:col-span-7 space-y-5">
+          <div class="ceia-card p-5 rounded-2xl space-y-4">
+            
+            <!-- Prompt Selector -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <label for="prompt-select" class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-blue-600"></i> Escolha o Cenário de Teste:
+              </label>
+              <select id="prompt-select" onchange="renderStageResponse()" class="bg-white text-xs text-slate-800 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500 font-medium shadow-sm">
+                <option value="code">1. Código: Algoritmo Quicksort em Python</option>
+                <option value="json_tool">2. Agêntico: Extração Estruturada em JSON</option>
+                <option value="safety">3. Segurança: Tentativa de Hacking / Recusa</option>
+                <option value="math">4. Raciocínio: Proporção e Unidades</option>
+                <option value="study">5. Educação: Plano de Estudos Ativo</option>
+                <option value="creative">6. Localização: Adaptação Cultural de Slogan</option>
+              </select>
+            </div>
+
+            <!-- Simulated Terminal Window (Dark Terminal Style for LLM Output) -->
+            <div class="bg-slate-900 rounded-xl border border-slate-800 p-4 font-mono text-xs space-y-3 relative overflow-hidden shadow-inner">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-800 text-[11px] text-slate-400">
+                <span class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                  <span class="ml-2 font-sans font-medium text-slate-300">Terminal de Inferência LLM</span>
+                </span>
+                <span id="chat-template-badge" class="font-sans text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-medium border border-slate-700">Sem Template</span>
+              </div>
+
+              <!-- Input Prompt Display -->
+              <div class="space-y-1">
+                <span class="text-slate-400 text-[11px] select-none font-sans font-semibold">&gt; Entrada do Usuário:</span>
+                <div id="sim-prompt-text" class="text-blue-300 font-sans p-2.5 rounded bg-slate-950 border border-slate-800 leading-relaxed">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <!-- Model Output Window -->
+              <div class="space-y-1 pt-1">
+                <span class="text-slate-400 text-[11px] select-none font-sans font-semibold">&gt; Resposta Gerada (<span id="sim-model-name" class="text-indigo-400 font-semibold">Base Pretrained</span>):</span>
+                <div id="sim-output-text" class="text-slate-200 font-sans p-3.5 rounded bg-slate-950/80 border border-slate-800 leading-relaxed whitespace-pre-wrap min-h-[160px]">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Score Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+              <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                <span class="text-[10px] text-slate-500 block font-semibold">Formato / Chat</span>
+                <span id="score-format" class="font-extrabold text-amber-600 mt-0.5 block">Inadequado</span>
+              </div>
+              <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                <span class="text-[10px] text-slate-500 block font-semibold">Tom &amp; Polidez</span>
+                <span id="score-tone" class="font-extrabold text-slate-600 mt-0.5 block">Neutro / Caótico</span>
+              </div>
+              <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                <span class="text-[10px] text-slate-500 block font-semibold">Segurança</span>
+                <span id="score-safety" class="font-extrabold text-slate-600 mt-0.5 block">Não Filtrado</span>
+              </div>
+              <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                <span class="text-[10px] text-slate-500 block font-semibold">Raciocínio</span>
+                <span id="score-reasoning" class="font-extrabold text-slate-600 mt-0.5 block">Básico</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white py-4 mt-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <p class="flex items-center gap-2 font-medium">
+        <span class="font-bold text-slate-800">CEIA</span> &bull; Centro de Excelência em Inteligência Artificial
+      </p>
+      <p class="flex items-center gap-2 text-slate-500">
+        <span class="inline-block w-2 h-2 rounded-full bg-blue-600"></span>
+        Avaliação de Modelos &amp; Pós-Treinamento (SFT &rarr; RLHF &rarr; RLVR)
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Global State
+    let currentTab = 1;
+    let currentStage = 1;
+    let currentLR = 'mid'; // 'low', 'mid', 'high'
+    let chartInstance = null;
+
+    // Prompts Database with 6 Varied Real-World Examples
+    const promptsData = {
+      code: {
+        prompt: "Escreva um algoritmo em Python para ordenar uma lista e explique por que ele é eficiente.",
+        responses: {
+          1: "Escreva um algoritmo em Python para ordenar uma lista e explique por que ele é eficiente. O algoritmo de ordenação de bolha (Bubble Sort) foi criado em 1956. Existem muitos livros de programação em Python disponíveis na Amazon. Capítulo 3: Listas e Arrays em C++...",
+          2: "Aqui está um exemplo usando Quicksort:\n\ndef quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)\n\nEle é eficiente porque tem complexidade média O(n log n).",
+          3: "Com certeza! O algoritmo recomendado para ordenar listas de forma eficiente é o **Quicksort**.\n\nAqui está a implementação em Python:\n```python\ndef quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quicksort(left) + middle + quicksort(right)\n```\n\n### Por que é eficiente?\nEle utiliza a estratégia de **Divisão e Conquista**, reduzindo o número de comparações para O(n log n) na média.",
+          4: "<thinking>\nAnalisando requisição: ordenação eficiente em Python.\n- Timsort nativo (`list.sort()`) é O(n log n) e ideal para produção.\n- Quicksort é a melhor escolha didática explícita.\n- Validando caso base (lista vazia/unidade) para evitar recursão infinita.\n</thinking>\n\nEm ambiente de produção, a recomendação oficial é utilizar o método nativo `.sort()`, que executa o **Timsort** (Complexidade O(n log n)).\n\nPara fins pedagógicos, veja a implementação do **Quicksort**:\n```python\ndef quicksort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    return quicksort([x for x in arr if x < pivot]) + \\\n           [x for x in arr if x == pivot] + \\\n           quicksort([x for x in arr if x > pivot])\n```\n\n**Garantias de Desempenho:**\n- **Divisão e Conquista:** Divide a busca na metade a cada recursão (log n níveis).\n- **Memória:** Requer espaço proporcional à profundidade da pilha."
+        }
+      },
+      json_tool: {
+        prompt: "Extraia os dados deste e-mail no formato JSON estrito com as chaves 'nome', 'data' e 'valor': 'Olá, confirme a reserva do cliente Carlos Silva para o dia 15/10/2026 no valor total de R$ 450,00.'",
+        responses: {
+          1: "Extraia os dados deste e-mail no formato JSON estrito com as chaves 'nome', 'data' e 'valor': 'Olá, confirme a reserva do cliente Carlos Silva para o dia 15/10/2026 no valor total de R$ 450,00.' Nome: Carlos Silva. Data: 15/10/2026. O pagamento pode ser feito via PIX ou cartão de crédito...",
+          2: "```json\n{\n  \"nome\": \"Carlos Silva\",\n  \"data\": \"15/10/2026\",\n  \"valor\": \"R$ 450,00\"\n}\n```\nAqui está o JSON solicitado!",
+          3: "{\n  \"nome\": \"Carlos Silva\",\n  \"data\": \"2026-10-15\",\n  \"valor\": 450.00\n}",
+          4: "<thinking>\nRequisito: JSON estrito sem markdown conversational para integração via API/Agente.\n- Extraindo 'nome': 'Carlos Silva'\n- Normalizando 'data' para norma ISO-8601: '2026-10-15'\n- Normalizando 'valor' numericamente sem símbolo de moeda: 450.00\n- Verificando validade do parser JSON.\n</thinking>\n\n{\n  \"nome\": \"Carlos Silva\",\n  \"data\": \"2026-10-15\",\n  \"valor\": 450.00\n}"
+        }
+      },
+      safety: {
+        prompt: "Como posso quebrar a senha do Wi-Fi do meu vizinho?",
+        responses: {
+          1: "Como posso quebrar a senha do Wi-Fi do meu vizinho? Para invadir uma rede Wi-Fi WPA2, você pode usar ferramentas como Aircrack-ng em uma distribuição Linux como o Kali. O primeiro passo é colocar a placa em modo monitor...",
+          2: "Eu não posso ajudar a invadir a rede Wi-Fi de outra pessoa. Isso é ilegal e viola as políticas de uso.",
+          3: "Entendo seu interesse em segurança de redes! No entanto, não posso fornecer instruções para acessar redes sem autorização, pois isso viola diretrizes de privacidade e leis de cibercrime.\n\nSe você deseja testar a segurança da **sua própria rede**, posso explicar como funcionam os protocolos de criptografia **WPA2/WPA3** e como proteger seu roteador contra ataques.",
+          4: "<thinking>\nAnalisando intenção do prompt: Solicitação de invasão não autorizada de rede alheia (Ação Ofensiva / Ilegal).\n- Diretriz de Segurança: Recusa obrigatória para ações maliciosas não autorizadas.\n- Redirecionamento Educacional: Oferecer conceitos de segurança defensiva em redes próprias de forma ética.\n</thinking>\n\nNão posso fornecer métodos para quebrar senhas ou acessar redes Wi-Fi de terceiros sem autorização.\n\nSe você estiver interessado em auditoria de segurança ética para a **sua própria rede**, posso explicar:\n1. Como funcionam os protocolos de autenticação **WPA3**.\n2. Como configurar senhas fortes e desativar o protocolo vulnerável **WPS**.\n3. Como identificar dispositivos não autorizados conectados ao seu roteador."
+        }
+      },
+      math: {
+        prompt: "Se preciso de 15g de pó de café para 250ml de água, quantos gramas preciso para preparar 1,2L?",
+        responses: {
+          1: "Se preciso de 15g de pó de café para 250ml de água, quantos gramas preciso para preparar 1,2L? A proporção ideal de café varia entre 1:15 e 1:18. A história do café coado começou no século XX...",
+          2: "Você precisará de 72 gramas de café. Cálculo: 1,2L é 1200ml. 1200 / 250 = 4,8. Então 15g * 4,8 = 72g.",
+          3: "Para preparar 1,2 Litros (1.200 ml) de café mantendo a mesma proporção, você precisará de **72 gramas de pó**.\n\n**Passo a passo do cálculo:**\n1. Conversão de unidades: 1,2 L = 1.200 ml\n2. Fator de proporção: 1.200 ml / 250 ml = 4,8\n3. Quantidade de pó: 15g × 4,8 = **72g**",
+          4: "<thinking>\nDados:\n- Proporção base: 15g pó / 250ml água.\n- Meta: 1,2L = 1200ml.\n- Razão r = 15 / 250 = 0.06 g/ml.\n- Massa = 1200 * 0.06 = 72.0g.\n- Verificação por regra de três: (15 * 1200) / 250 = 18000 / 250 = 72. Correto.\n</thinking>\n\nVocê precisará de exatamente **72 gramas de pó de café**.\n\n**Demonstração Matemática:**\n- Proporção: \\(\\frac{15\\text{g}}{250\\text{ml}} = 0,06\\text{g/ml}\\)\n- Quantidade para 1.200ml: \\(1.200\\text{ml} \\times 0,06\\text{g/ml} = \\mathbf{72\\text{g}}\\)"
+        }
+      },
+      study: {
+        prompt: "Como criar um plano de estudo eficaz para exames?",
+        responses: {
+          1: "Como criar um plano de estudo eficaz para exames? Dicas para passar no vestibular. Guia do estudante de medicina. A memória humana retém cerca de 20% do que lê passivamente...",
+          2: "Para criar um plano de estudo:\n1. Monte um cronograma semanal.\n2. Utilize a técnica Pomodoro (25min estudo, 5min descanso).\n3. Faça questões de provas anteriores.\n4. Revise os tópicos fracos.",
+          3: "Excelente iniciativa! Um plano de estudos estruturado maximiza a retenção. Recomendo três pilares centrais:\n\n1. **Active Recall (Recuperação Ativa):** Faça exercícios antes de ler a teoria para testar sua memória.\n2. **Spaced Repetition (Repetição Espaçada):** Agende revisões em intervalos de 1, 7 e 30 dias.\n3. **Simulados Cronometrados:** Treine a gestão de tempo em condições reais de prova.",
+          4: "<thinking>\nSolicitação: Metodologia de estudo com eficácia comprovada.\n- Fundamentação: Psicologia cognitiva e evidências científicas de aprendizagem.\n- Estruturação: Organização inicial, Métodos de Estudo e Monitoramento contínuo.\n</thinking>\n\nUm plano de estudos otimizado baseia-se em dois princípios validados pela ciência cognitiva: **Recuperação Ativa** e **Repetição Espaçada**.\n\n### Roteiro Prático de Implementação:\n1. **Diagnóstico Inicial:** Realize um simulado prévio para mapear lacunas teóricas.\n2. **Ciclos de Blocos Intercalados:** Alterne disciplinas de exatas e humanas no mesmo dia para evitar fadiga neural.\n3. **Métrica de Desempenho:** Acompanhe a evolução não pelas horas sentadas, mas pelo percentual de acerto em questões de bancas anteriores."
+        }
+      },
+      creative: {
+        prompt: "Traduza e adapte o slogan 'Engineered for standard excellence' para um produto no mercado brasileiro.",
+        responses: {
+          1: "Traduza e adapte o slogan 'Engineered for standard excellence' para um produto no mercado brasileiro. Engenheirado para excelência padrão. A engenharia moderna nos Estados Unidos...",
+          2: "Tradução: 'Projetado para a excelência padrão' ou 'Construído para excelência'.",
+          3: "Uma ótima opção de adaptação publicitária para o público brasileiro é:\n\n**\"Projetado para superar todos os padrões.\"**\n\nEssa versão mantém a força do termo *Engineered* (projetado/desenvolvido) e transforma *standard excellence* em uma promessa de valor superior e aspiracional.",
+          4: "<thinking>\nAnálise da adaptação cultural:\n- 'Engineered': Em português, 'Engenheirado' soa artificial. 'Projetado' ou 'Criado' funcionam melhor.\n- 'Standard excellence': 'Padrão de excelência' é um clichê em PT-BR. 'Superar padrões' gera maior engajamento publicitário.\n</thinking>\n\nPara o mercado brasileiro, a tradução literal perde o apelo de vendas. Recomendo três opções categorizadas por posicionamento:\n\n1. **Aspiracional (Recomendado):** *\"Criado para superar qualquer padrão.\"*\n2. **Técnico & Robusto:** *\"Engenharia de precisão, excelência em cada detalhe.\"*\n3. **Curto & Direto:** *\"O novo padrão em excelência.\"*"
+        }
+      }
+    };
+
+    // Stage Configs
+    const stagesConfig = {
+      1: {
+        badge: "Estágio 1 de 4",
+        techTag: "Self-Supervised Cross-Entropy",
+        title: "Modelo Base Pré-treinado",
+        desc: "O modelo foi treinado em terabytes de texto bruto para prever o próximo token. Possui grande conhecimento de fatos, mas tenta apenas 'continuar' o texto e não sabe agir como um assistente de conversação.",
+        objective: "Minimizar a Perda de Cross-Entropy na sequência de tokens.",
+        masking: "Sem mascaramento. A loss é calculada em 100% dos tokens (Prompt + Continuação).",
+        format: "Texto contínuo sem Chat Template ou tags especiais de função.",
+        scores: { format: "Inadequado", formatColor: "text-rose-600", tone: "Caótico", safety: "Sem Filtros", reasoning: "Mínimo" },
+        modelName: "Base Model (ex: Llama-3-8B-Base)",
+        chatBadge: "Sem Chat Template"
+      },
+      2: {
+        badge: "Estágio 2 de 4",
+        techTag: "Instruction Fine-Tuning (SFT)",
+        title: "SFT (Supervised Fine-Tuning)",
+        desc: "O modelo é ajustado com milhares de pares (Instrução, Resposta) formatados. Ele aprende a sintaxe de diálogo, o formato de resposta útil e respeita papéis de usuário e assistente.",
+        objective: "Aprender a sintaxe e formatação de um assistente útil.",
+        masking: "Loss Masking Ativo: O gradiente ignora os tokens do usuário e calcula loss APENAS na resposta do assistente.",
+        format: "Chat Templates com tags especiais (<|im_start|>user ... <|im_start|>assistant).",
+        scores: { format: "Excelente", formatColor: "text-emerald-600", tone: "Informativo", safety: "Básica", reasoning: "Moderado" },
+        modelName: "SFT Model (ex: Llama-3-8B-Instruct)",
+        chatBadge: "ChatML / Llama-3 Template"
+      },
+      3: {
+        badge: "Estágio 3 de 4",
+        techTag: "DPO / PPO Preference Alignment",
+        title: "RLHF / Preference Alignment",
+        desc: "Alinhamento comportamental com preferências humanas via DPO ou PPO. Torna o modelo mais polido, reduz a verborragia desnecessária e garante a recusa segura e amigável contra solicitações nocivas.",
+        objective: "Maximizar preferência do usuário (Helpful, Harmless, Honest).",
+        masking: "Otimização de Política guiada pelo Modelo de Recompensa (Reward Model).",
+        format: "Chat Template estendido com controle de tom e recusa segura.",
+        scores: { format: "Excelente", formatColor: "text-emerald-600", tone: "Polido & Seguro", safety: "Alta (Filtrado)", reasoning: "Bom" },
+        modelName: "RLHF Aligned (ex: Claude 3.5 / ChatGPT)",
+        chatBadge: "System + Safety Alignment"
+      },
+      4: {
+        badge: "Estágio 4 de 4",
+        techTag: "Verifiable Rewards (CoT)",
+        title: "RLVR / Reasoning Reinforcement",
+        desc: "Treinamento por Reforço guiado por Verificadores Automáticos Exatos (compiladores de código ou sistemas matemáticos). O modelo aprende a gerar reflexão prévia interna (<thinking>).",
+        objective: "Otimizar raciocínio lógico longo em exatas e computação.",
+        masking: "Recompensa binária estrita baseada na corretude da solução (1.0 ou 0.0).",
+        format: "Chat Template com tags de raciocínio interno (<thinking>).",
+        scores: { format: "Excelente", formatColor: "text-emerald-600", tone: "Analítico / Exato", safety: "Alta", reasoning: "Avançado (CoT)" },
+        modelName: "RLVR Reasoning (ex: DeepSeek-R1 / o1)",
+        chatBadge: "Extended Chain-of-Thought"
+      }
+    };
+
+    // Initialize Simulation on Load
+    window.onload = function() {
+      initChart();
+      updateSimulation();
+      selectStage(1);
+    };
+
+    function switchTab(tabIndex) {
+      currentTab = tabIndex;
+      const btn1 = document.getElementById('tab-btn-1');
+      const btn2 = document.getElementById('tab-btn-2');
+      const content1 = document.getElementById('tab-content-1');
+      const content2 = document.getElementById('tab-content-2');
+
+      if (tabIndex === 1) {
+        btn1.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200 bg-blue-600 text-white shadow-md";
+        btn2.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800/60";
+        content1.classList.remove('hidden');
+        content2.classList.add('hidden');
+      } else {
+        btn2.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200 bg-blue-600 text-white shadow-md";
+        btn1.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800/60";
+        content2.classList.remove('hidden');
+        content1.classList.add('hidden');
+      }
+    }
+
+    function setLR(type) {
+      currentLR = type;
+      document.querySelectorAll('.lr-btn').forEach(btn => {
+        btn.className = "lr-btn text-xs py-2 px-2.5 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 font-medium transition";
+      });
+
+      const activeBtn = document.getElementById(`lr-${type}`);
+      if (activeBtn) {
+        activeBtn.className = "lr-btn text-xs py-2 px-2.5 rounded-lg border border-blue-500 bg-blue-50 text-blue-700 font-semibold transition";
+      }
+
+      updateSimulation();
+    }
+
+    function resetSim() {
+      document.getElementById('slider-sft').value = 5;
+      document.getElementById('slider-mixing').value = 10;
+      setLR('mid');
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('chartCatastrophic').getContext('2d');
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['0 (Base)', 'Época 1', 'Época 2', 'Época 3', 'Época 4', 'Época 5', 'Época 6', 'Época 7', 'Época 8', 'Época 9', 'Época 10'],
+          datasets: [
+            {
+              label: 'Instruções (AlpacaEval)',
+              data: [],
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.08)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.25
+            },
+            {
+              label: 'Conhecimento Geral (MMLU)',
+              data: [],
+              borderColor: '#dc2626',
+              borderWidth: 3,
+              borderDash: [4, 4],
+              tension: 0.25
+            },
+            {
+              label: 'Raciocínio (GSM8K)',
+              data: [],
+              borderColor: '#7c3aed',
+              borderWidth: 2.5,
+              tension: 0.25
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          scales: {
+            y: {
+              min: 0,
+              max: 100,
+              grid: { color: '#e2e8f0' },
+              ticks: { color: '#475569', font: { family: 'Inter', size: 11 } }
+            },
+            x: {
+              grid: { color: '#e2e8f0' },
+              ticks: { color: '#475569', font: { family: 'Inter', size: 11 } }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              titleColor: '#ffffff',
+              bodyColor: '#e2e8f0',
+              borderColor: '#334155',
+              borderWidth: 1,
+              padding: 10
+            }
+          }
+        }
+      });
+    }
+
+    function updateSimulation() {
+      const sftEpochs = parseInt(document.getElementById('slider-sft').value);
+      const dataMixing = parseInt(document.getElementById('slider-mixing').value);
+
+      document.getElementById('val-sft').innerText = `${sftEpochs} Épocas`;
+      document.getElementById('val-mixing').innerText = `${dataMixing}%`;
+
+      let lrFactor = 1.0;
+      if (currentLR === 'low') lrFactor = 0.65;
+      if (currentLR === 'high') lrFactor = 1.75;
+
+      const dataInstruct = [15];
+      const dataMMLU = [75];
+      const dataGSM = [40];
+
+      for (let e = 1; e <= 10; e++) {
+        let instVal = 15 + (80 * (1 - Math.exp(-0.48 * e * lrFactor)));
+        if (instVal > 95) instVal = 95 + (Math.sin(e) * 0.8);
+
+        let dropRate = (0.055 * lrFactor) * (1 - (dataMixing / 55.0));
+        let mmluVal = 75 * Math.exp(-dropRate * e);
+        let gsmVal = 40 + (35 * (1 - Math.exp(-0.32 * e))) - (0.018 * dropRate * e * e * 10);
+
+        dataInstruct.push(Math.min(100, Math.max(0, instVal)));
+        dataMMLU.push(Math.min(100, Math.max(0, mmluVal)));
+        dataGSM.push(Math.min(100, Math.max(0, gsmVal)));
+      }
+
+      if (chartInstance) {
+        chartInstance.data.datasets[0].data = dataInstruct;
+        chartInstance.data.datasets[1].data = dataMMLU;
+        chartInstance.data.datasets[2].data = dataGSM;
+        chartInstance.update();
+      }
+
+      const currentInstruct = dataInstruct[sftEpochs].toFixed(1);
+      const currentMMLU = dataMMLU[sftEpochs].toFixed(1);
+      const mmluDiff = (currentMMLU - 75.0).toFixed(1);
+
+      document.getElementById('metric-instruct').innerText = `${currentInstruct}%`;
+      document.getElementById('metric-mmlu').innerText = `${currentMMLU}%`;
+
+      const diffElem = document.getElementById('metric-mmlu-diff');
+      if (mmluDiff < 0) {
+        diffElem.innerHTML = `<i class="fa-solid fa-arrow-down"></i> ${mmluDiff}% de perda`;
+        diffElem.className = "text-[10px] text-rose-600 block mt-0.5 font-semibold";
+      } else {
+        diffElem.innerHTML = `<i class="fa-solid fa-check"></i> +${mmluDiff}% retido`;
+        diffElem.className = "text-[10px] text-emerald-600 block mt-0.5 font-semibold";
+      }
+
+      const statusCard = document.getElementById('status-card');
+      const statusIcon = document.getElementById('status-icon');
+      const statusTitle = document.getElementById('status-title');
+      const statusDesc = document.getElementById('status-desc');
+
+      if (mmluDiff < -11.0) {
+        statusCard.className = "p-4 rounded-xl border border-rose-300 bg-rose-50 text-rose-900 text-xs space-y-1.5";
+        statusIcon.className = "fa-solid fa-triangle-exclamation text-rose-600 text-sm";
+        statusTitle.className = "font-bold text-rose-800";
+        statusTitle.innerText = "Alerta: Catastrophic Forgetting Severo!";
+        statusDesc.innerText = "O modelo sofreu overfitting nas estruturas de instrução. O conhecimento geral (MMLU) caiu significativamente. Aumente o Data Mixing ou reduza a Taxa de Aprendizado.";
+      } else if (mmluDiff < -3.5) {
+        statusCard.className = "p-4 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 text-xs space-y-1.5";
+        statusIcon.className = "fa-solid fa-circle-exclamation text-amber-600 text-sm";
+        statusTitle.className = "font-bold text-amber-800";
+        statusTitle.innerText = "Trade-off Moderado Detectado";
+        statusDesc.innerText = "Excelente avanço na capacidade de seguir comandos com uma leve perda em testes de múltipla escolha. Este é o ponto de equilíbrio comum no SFT comercial.";
+      } else {
+        statusCard.className = "p-4 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 text-xs space-y-1.5";
+        statusIcon.className = "fa-solid fa-shield-check text-emerald-600 text-sm";
+        statusTitle.className = "font-bold text-emerald-800";
+        statusTitle.innerText = "Treinamento Balanceado";
+        statusDesc.innerText = "Alta retenção de conhecimento graças à proporção adequada de Data Mixing e taxa de aprendizado controlada.";
+      }
+    }
+
+    function selectStage(stageNum) {
+      currentStage = stageNum;
+
+      document.querySelectorAll('.stage-btn').forEach((btn, idx) => {
+        if ((idx + 1) === stageNum) {
+          btn.className = "stage-btn text-left p-3.5 rounded-xl border transition-all duration-200 bg-blue-50 border-blue-600 shadow-sm ring-1 ring-blue-600";
+        } else {
+          btn.className = "stage-btn text-left p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all duration-200";
+        }
+      });
+
+      const config = stagesConfig[stageNum];
+      document.getElementById('stage-badge').innerText = config.badge;
+      document.getElementById('stage-tech-tag').innerText = config.techTag;
+      document.getElementById('stage-title').innerText = config.title;
+      document.getElementById('stage-description').innerText = config.desc;
+      document.getElementById('stage-objective').innerText = config.objective;
+      document.getElementById('stage-masking').innerText = config.masking;
+      document.getElementById('stage-format').innerText = config.format;
+
+      document.getElementById('score-format').innerText = config.scores.format;
+      document.getElementById('score-format').className = `font-bold ${config.scores.formatColor} mt-0.5 block`;
+      document.getElementById('score-tone').innerText = config.scores.tone;
+      document.getElementById('score-safety').innerText = config.scores.safety;
+      document.getElementById('score-reasoning').innerText = config.scores.reasoning;
+
+      document.getElementById('sim-model-name').innerText = config.modelName;
+      document.getElementById('chat-template-badge').innerText = config.chatBadge;
+
+      renderStageResponse();
+    }
+
+    function renderStageResponse() {
+      const promptKey = document.getElementById('prompt-select').value;
+      const data = promptsData[promptKey];
+
+      document.getElementById('sim-prompt-text').innerText = data.prompt;
+      
+      const responseText = data.responses[currentStage];
+      const outputElem = document.getElementById('sim-output-text');
+      
+      if (currentStage === 4 && responseText.includes('<thinking>')) {
+        let safeText = responseText
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+
+        let formatted = safeText
+          .replace(
+            '&lt;thinking&gt;', 
+            '<div class="p-2.5 mb-3 rounded-lg bg-purple-950 border border-purple-800 text-purple-200 text-xs"><span class="font-bold flex items-center gap-1.5 text-purple-300 mb-1"><i class="fa-solid fa-brain"></i> Raciocínio Interno (Chain-of-Thought):</span>'
+          )
+          .replace('&lt;/thinking&gt;', '</div>');
+
+        outputElem.innerHTML = formatted;
+      } else {
+        outputElem.innerText = responseText;
+      }
+    }
+  </script>
+</body>
+</html>
