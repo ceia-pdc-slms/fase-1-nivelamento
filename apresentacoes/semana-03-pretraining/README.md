@@ -10,11 +10,11 @@
 
 **[Ler o notebook com os resultados prontos](como_um_modelo_aprende_essencial.ipynb)**
 
-[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ceia-pdc-slms/fase-1-nivelamento/blob/ea755df7893db6d897c8d38157a71a294a229d26/nivelamento/semana-03-pretraining/como_um_modelo_aprende_essencial.ipynb)
+[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ceia-pdc-slms/fase-1-nivelamento/blob/main/apresentacoes/semana-03-pretraining/como_um_modelo_aprende_essencial.ipynb)
 
 O notebook contém as saídas das 13 células de código e os três gráficos. Para estudar, basta abrir o arquivo e acompanhar as explicações. O GitHub mostra uma visualização estática; o Colab permite alterar o código e executar o treino no navegador.
 
-O botão do Colab aponta para uma revisão fixa do notebook, preservando a versão compartilhada mesmo depois da exclusão da branch. Se o notebook for atualizado, atualize também o identificador do commit nesse link.
+O botão do Colab aponta para a versão atual do notebook na `main`.
 
 ## O que o artefato ensina
 
