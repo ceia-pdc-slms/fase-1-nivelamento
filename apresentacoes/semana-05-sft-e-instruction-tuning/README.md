@@ -10,11 +10,12 @@ Material da apresentação de Gabriel Palhares, Jolie Pavan e Mateus Nery.
 |---|---|
 | Apresentação editável, com 34 slides | [Baixar PowerPoint](SFT-e-instruction-tuning.pptx) |
 | Artefato didático, com gráficos e tabelas já salvos | [Ler o notebook no GitHub](sft-do-zero.ipynb) |
+| Simulador interativo de pós-treinamento | [Abrir HTML](simulador-pos-treinamento-de-llms.html) |
 | Notebook para executar e modificar | Botão abaixo |
 
-[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ceia-pdc-slms/fase-1-nivelamento/blob/143022abe899b0be2e49b6c013977f8699529b93/nivelamento/semana-05-sft-e-instruction-tuning/sft-do-zero.ipynb)
+[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ceia-pdc-slms/fase-1-nivelamento/blob/main/apresentacoes/semana-05-sft-e-instruction-tuning/sft-do-zero.ipynb)
 
-Esta pasta segue a **semana 5** do [plano de nivelamento](../fase-1-nivelamento-apresentacoes.md). A identificação de semana 4 presente na apresentação foi preservada no arquivo enviado.
+Esta pasta segue a **semana 5** do [plano de nivelamento](../../nivelamento/fase-1-nivelamento-apresentacoes.md). A identificação de semana 4 presente na apresentação foi preservada no arquivo enviado.
 
 ## O que acompanhar no notebook
 
@@ -44,7 +45,7 @@ Para começar, leia os textos e as saídas salvas. As células de implementaçã
 
 Os dados são gerados no próprio notebook. Não é necessário baixar datasets, modelos ou checkpoints. O tempo de execução depende do ambiente; sementes fixas ajudam a repetir o experimento, mas diferenças de bibliotecas e hardware podem alterar os resultados numéricos.
 
-O botão do Colab aponta para uma versão fixa do notebook, para continuar funcionando depois que a branch for removida.
+O botão do Colab aponta para a versão atual do notebook na `main`.
 
 ## Executar localmente
 
