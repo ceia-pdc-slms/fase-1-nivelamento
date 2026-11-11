@@ -10,9 +10,9 @@
 | Notebook com explicações, tabelas e gráficos já salvos | [Ler no GitHub](lora_e_qlora_didatico.ipynb) |
 | Dependências para execução local | [requirements.txt](requirements.txt) |
 
-[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ceia-pdc-slms/fase-1-nivelamento/blob/gabriel/semana-07-peft-lora-e-qlora/apresentacoes/semana-07-peft-lora-e-qlora/lora_e_qlora_didatico.ipynb)
+[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ceia-pdc-slms/fase-1-nivelamento/blob/main/apresentacoes/semana-07-peft-lora-e-qlora/lora_e_qlora_didatico.ipynb)
 
-O botão aponta para a branch desta contribuição e permite executar o notebook antes do merge. Depois da integração, a [versão da main](https://colab.research.google.com/github/ceia-pdc-slms/fase-1-nivelamento/blob/main/apresentacoes/semana-07-peft-lora-e-qlora/lora_e_qlora_didatico.ipynb) também estará disponível no Colab.
+O botão abre a versão consolidada na `main`.
 
 No Colab, use um ambiente com CPU e selecione **Ambiente de execução → Executar tudo**. Para editar sua própria versão, use **Arquivo → Salvar uma cópia no Drive**. Leia as saídas salvas se quiser estudar sem executar.
 
