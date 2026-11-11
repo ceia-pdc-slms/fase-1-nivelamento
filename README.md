@@ -4,13 +4,22 @@ Repositório da Fase 1 do projeto CEIA — SLMs, Benchmark e Agentes, dedicado a
 
 O plano completo da etapa está em [`nivelamento/fase-1-nivelamento-apresentacoes.md`](nivelamento/fase-1-nivelamento-apresentacoes.md). Todas as apresentações e seus conteúdos estão em [`apresentacoes/`](apresentacoes/README.md), organizados por semana. Cada equipe deve colocar o slideshow, as fontes e os demais artefatos na pasta da semana correspondente. A liderança fará posteriormente a curadoria do material que seguirá para outras fases.
 
+## Progresso e organização
+
+A [jornada resumida do time](docs/jornada-nivelamento.md) conecta os artefatos das oito semanas e registra os próximos passos para a Fase 2. O [índice de apresentações](apresentacoes/README.md) reúne os links para os materiais.
+
+- `apresentacoes/`: slides, notebooks, fontes e resultados didáticos, por semana.
+- `nivelamento/`: plano de nivelamento.
+- `docs/`: roadmap e documentação de acompanhamento.
+- `papers/`: radar de artigos candidatos à reprodução.
+
 ## Como contribuir
 
 Não faça commits diretamente na `main`. Para cada apresentação:
 
 1. Atualize a `main`: `git switch main` e `git pull`.
 2. Crie sua branch: `git switch -c nome/semana-NN-assunto`.
-3. Trabalhe somente na pasta da semana e registre os arquivos com `git add` e `git commit`.
+3. Trabalhe em `apresentacoes/semana-NN-assunto/`, reunindo slides, fontes e artefatos, e registre os arquivos com `git add` e `git commit`.
 4. Envie a branch: `git push -u origin nome/semana-NN-assunto`.
 5. Abra um Pull Request para a `main`, descrevendo o material e como visualizar ou executar os artefatos.
 6. Aguarde a revisão de Lucca. Se houver pedidos de alteração, atualize a mesma branch; somente Lucca aprova e realiza o merge.
